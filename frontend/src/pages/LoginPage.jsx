@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/api";
 import { motion } from "framer-motion";
 
 const LoginPage = () => {
@@ -14,17 +14,7 @@ const LoginPage = () => {
     e.preventDefault();
     setError(""); // Clear previous errors
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const { data } = await axios.post(
-        "/api/users/login",
-        { email, password },
-        config
-      );
+      const { data } = await apiClient.post("/users/login", { email, password });
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate("/");

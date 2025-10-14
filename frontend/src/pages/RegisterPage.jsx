@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/api";
 import { motion } from "framer-motion";
 
 const RegisterPage = () => {
@@ -44,21 +44,11 @@ const RegisterPage = () => {
 
     setIsLoading(true);
     try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      const { data } = await axios.post(
-        "/api/users",
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        },
-        config
-      );
+      const { data } = await apiClient.post("/users", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate("/");

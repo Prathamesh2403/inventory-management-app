@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/api";
 import { motion } from "framer-motion";
 
 const DashboardPage = () => {
@@ -10,13 +10,7 @@ const DashboardPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      const { data } = await axios.get("/api/products", config);
+      const { data } = await apiClient.get("/products");
       setProducts(data);
     } catch (error) {
       console.error("Could not fetch products", error);
@@ -39,12 +33,7 @@ const DashboardPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        };
-        await axios.delete(`/api/products/${id}`, config);
+        await apiClient.delete(`/products/${id}`);
         fetchProducts();
       } catch (error) {
         console.error("Failed to delete product", error);

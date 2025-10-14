@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/api";
 import { motion } from "framer-motion";
 
 const EditProductPage = () => {
@@ -43,13 +43,7 @@ const EditProductPage = () => {
           return;
         }
 
-        const config = {
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        };
-
-        const { data } = await axios.get(`/api/products/${productId}`, config);
+        const { data } = await apiClient.get(`/products/${productId}`);
 
         setFormData({
           name: data.name || "",
@@ -102,15 +96,7 @@ const EditProductPage = () => {
 
     setIsSaving(true);
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      await axios.put(`/api/products/${productId}`, formData, config);
+      await apiClient.put(`/products/${productId}`, formData);
 
       setSuccess("Product updated successfully!");
       setTimeout(() => {

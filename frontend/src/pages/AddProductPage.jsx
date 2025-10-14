@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../utils/api";
 import { motion } from "framer-motion";
 
 const AddProductPage = () => {
@@ -73,15 +73,7 @@ const AddProductPage = () => {
 
     setIsSaving(true);
     try {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      };
-
-      await axios.post("/api/products", formData, config);
+      await apiClient.post("/products", formData);
 
       setSuccess("Product added successfully!");
       setTimeout(() => {
