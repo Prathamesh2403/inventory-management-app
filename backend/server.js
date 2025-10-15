@@ -15,11 +15,14 @@ const app = express();
 
 // CORS middleware for production
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
-  if (req.method === 'OPTIONS') {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
     res.sendStatus(200);
   } else {
     next();
@@ -38,7 +41,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 
 // 3. Add the Cron Job for Low Stock Alerts '*/10 * * * * *'(10 sec) / "* * * * *"(1 min)
-cron.schedule("*/10 * * * * *", async () => {
+cron.schedule("*/30 * * * * *", async () => {
   console.log("Running cron job: Checking for low-stock products...");
   try {
     const lowStockProducts = await Product.find({
