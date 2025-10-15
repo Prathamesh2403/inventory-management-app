@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 // API utility for handling different environments
 const getApiUrl = () => {
@@ -6,9 +6,9 @@ const getApiUrl = () => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  
+
   // In development, use the proxy
-  return '/api';
+  return "/api";
 };
 
 export const API_BASE_URL = getApiUrl();
@@ -17,13 +17,13 @@ export const API_BASE_URL = getApiUrl();
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Request interceptor to add auth token
 apiClient.interceptors.request.use((config) => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+  const userInfo = JSON.parse(localStorage.getItem("userInfo") || "null");
   if (userInfo?.token) {
     config.headers.Authorization = `Bearer ${userInfo.token}`;
   }
@@ -34,7 +34,7 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', error);
+    console.error("API Error:", error);
     return Promise.reject(error);
   }
 );
